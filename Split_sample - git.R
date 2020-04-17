@@ -8,6 +8,7 @@ library(cvAUC)
 library(foreach)
 
 ##----------------------------STEP 1-------------------------------------------
+#read the dataset in 
 load('development.RData')
 data_s = dev %>% arrange(cvvar) 
 ##training and testing sets seperation seperation using the already build in folds
@@ -23,11 +24,10 @@ feat <- setdiff(colnames(training),c("person_id","visit_seq","death30", "death90
 cur.num.trees <- 100 
 
 #specify minimum node sizes to seZrch over for tuning parameter selection
-min.node.size <- c(10000, 25000, 50000,100000,150000) ##change this for whole dataset 
+min.node.size <- c(10000, 25000, 50000,100000,150000) 
 
 #specify number of features to randomly sample at each split of tree
 #for this dataset, the default number of predictors that random forest would select is sqrt(p)=11 (where p is number of predictors)
-#Eric's code searches over 3*sqrt(p), 2*sqrt(p), sqrt(p), and sqrt(p)/2 where the floor() functin rounds each to the lower whole number
 node.vars <- c(floor(sqrt(length(feat)))*2, floor(sqrt(length(feat))), floor(sqrt(length(feat))/2))
 
 #function from Rod that performs a stratfied bootstrap and saves information so that it can be used to tell ranger bootstrap samples each tree should be built on
